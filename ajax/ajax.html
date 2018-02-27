@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ajax</title>
+    <script type="text/javascript">
+      function getResults(){
+        var results = '';
+
+        //1korak - pravimo xtttp zahtev
+        var xhttp = new XMLHttpRequest();
+
+        //2korak poziv funkcije
+        xhttp.onreadystatechange = function () {
+
+          //konekcija na server = provera
+          if (this.readyState == 4 && this.status == 200) {
+
+          //prihvatanje podataka
+
+            var val = this.responseText;
+            var jval = JSON.parse(val);
+            document.getElementById('results').innerHTML = jval.results;
+
+          }
+
+        };
+
+        //3 kozamo koja se skripta izvrsi
+
+        xhttp.open('Get','index.php', true);
+
+        //4 saljemo komandu na serveru
+
+        xhttp.send();
+
+
+      }
+    </script>
+  </head>
+  <body>
+    <div>
+      <h1>Ajax poziv</h1>
+      <p id='results'>
+        Rezultati
+      </p>
+      <p>
+        <button type="button" name="button" onclick='getResults()'>Ucitaj rezultate</button>
+        <button type="button" name="button" onclick='getJQResults()'>Ucitaj JQuery rezultate</button>
+      </p>
+    </div>
+
+    <script type="text/javascript">
+      function getJQResults(){
+        $.ajax({
+          url: "index.php",
+          method: "GET",
+          dataType: "json",
+          data: { id: 1 }
+        })
+
+        .done(function (data){
+          $('#results').html(data.results);
+        })
+
+        .fail(function (){
+          $('#results').html('Desila se greska');
+        })
+
+      };
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </body>
+</html>
