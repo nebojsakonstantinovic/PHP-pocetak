@@ -47,6 +47,7 @@
       <p>
         <button type="button" name="button" onclick='getResults()'>Ucitaj rezultate</button>
         <button type="button" name="button" onclick='getJQResults()'>Ucitaj JQuery rezultate</button>
+        <button type="button" name="button" onclick='getJQResultsJSON()'>Ucitaj JQuery rezultate JSON</button>
       </p>
     </div>
 
@@ -61,6 +62,34 @@
 
         .done(function (data){
           $('#results').html(data);
+        })
+
+        .fail(function (){
+          $('#results').html('Desila se greska');
+        })
+
+      };
+    </script>
+
+    <script type="text/javascript">
+      function getJQResultsJSON(){
+        $.ajax({
+          url: "http://ndf.cubes.rs/ajax.php",
+          method: "GET",
+          dataType: "JSON",
+          data: { format: "json" }
+        })
+
+        .done(function (data){
+
+          var tbl = '<table>';
+          $.each(data, function(key,value){
+            tbl += '<tr><td>' + value.id + '</td><td>' + value.first_name + '</td><td>' + value.last_name + '</td><td>' + value.age + '</td></tr>';
+          });
+
+          tbl += '</table>';
+
+          $('#results').html(tbl);
         })
 
         .fail(function (){
